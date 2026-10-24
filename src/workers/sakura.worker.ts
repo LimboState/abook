@@ -193,8 +193,8 @@ class SakuraList {
 // ---------------------------------------------------------------------------
 // 核心逻辑
 // ---------------------------------------------------------------------------
-async function loadImage(): Promise<ImageBitmap> {
-	const response = await fetch("/assets/images/effects/sakura.png");
+async function loadImage(imageUrl: string): Promise<ImageBitmap> {
+	const response = await fetch(imageUrl);
 	if (!response.ok) {
 		throw new Error(
 			`Failed to load sakura image: ${response.status} ${response.statusText}`,
@@ -322,7 +322,7 @@ async function handleMessage(msg: SakuraWorkerInboundMessage) {
 				canvas.height = windowHeight;
 				ctx = canvas.getContext("2d");
 
-				img = await loadImage();
+				img = await loadImage(msg.imageUrl);
 				sakuraList = createSakuraList(config, img);
 				isRunning = true;
 				// init 完成后自动启动动画(除非页面当前隐藏)

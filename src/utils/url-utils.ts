@@ -93,8 +93,14 @@ export function url(path: string): string {
 		return path;
 	}
 
-	// 只有本地相对路径才添加BASE_URL
-	return joinUrl("", import.meta.env.BASE_URL, path);
+	// Astro 生成的资源路径可能已经包含 BASE_URL，避免在子路径部署时重复追加。
+	const baseUrl = import.meta.env.BASE_URL;
+	if (path === baseUrl || path.startsWith(baseUrl)) {
+		return path;
+	}
+
+	// 只有尚未包含 BASE_URL 的本地路径才追加部署子路径。
+	return joinUrl("", baseUrl, path);
 }
 
 // 内容详情页路径模式：文章(/posts/、/post/) 与 项目详情(/projects/<slug>/)

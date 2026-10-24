@@ -5,9 +5,16 @@
 // 索引会输出到 <root>/pagefind，随站点一起上传。
 
 import { spawnSync } from "node:child_process";
+import { globSync } from "glob";
 import { resolveSiteRoot } from "./site-root";
 
 const siteRoot = resolveSiteRoot();
+const posts = globSync("src/content/posts/**/*.{md,mdx}");
+
+if (posts.length === 0) {
+	console.log("No posts found; skipping Pagefind index generation.");
+	process.exit(0);
+}
 
 const result = spawnSync("pagefind", ["--site", siteRoot], {
 	stdio: "inherit",

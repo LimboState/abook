@@ -9,6 +9,7 @@ export type SakuraWorkerInboundMessage =
 	| {
 			type: "init";
 			config: SakuraConfig;
+			imageUrl: string;
 			/** 通过 transfer 转移给 Worker 的 OffscreenCanvas */
 			canvas: OffscreenCanvas;
 			width: number;

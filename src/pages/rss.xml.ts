@@ -4,6 +4,7 @@ import { formatDateI18nWithTime } from "@utils/date-utils";
 import { renderFeedEntries } from "@utils/feed-utils";
 import type { APIContext } from "astro";
 import { siteConfig } from "@/config";
+import { url } from "@/utils/url-utils";
 import pkg from "../../package.json";
 
 export const prerender = true;
@@ -19,10 +20,11 @@ export async function GET(context: APIContext): Promise<Response> {
 		link: entry.link,
 		...(includeContent ? { content: entry.content } : {}),
 	}));
+	const siteOrigin = context.site ?? new URL(siteConfig.site_url);
 	return rss({
 		title: siteConfig.title,
 		description: siteConfig.subtitle || "No description",
-		site: context.site ?? "https://firefly.cuteleaf.cn",
+		site: new URL(url("/"), siteOrigin),
 		customData: `<templateTheme>Firefly</templateTheme>
 		<templateThemeVersion>${pkg.version}</templateThemeVersion>
 		<templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl>

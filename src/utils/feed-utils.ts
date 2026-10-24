@@ -81,7 +81,8 @@ function collapseFeedWhitespace(html: string): string {
  * path 为相对路径时直接相对 site 求绝对。
  */
 export function toAbsoluteUrl(site: URL, path: string): string {
-	return new URL(path.startsWith("/") ? path : `/${path}`, site).href;
+	const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+	return new URL(url(normalizedPath), site).href;
 }
 
 /**
